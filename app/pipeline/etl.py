@@ -60,7 +60,7 @@ class ETLProcess:
 
     def dmi_etl(self, station_id, parameter_id, from_time: str = "2026-03-09T00:00:00Z", max_pulls: int = None,
                 limit: int = 5000):
-        API = DMIAPI()
+        api = DMIAPI()
         start_time = time.time()
         total_pulls = 0
         offset = 0
@@ -68,7 +68,7 @@ class ETLProcess:
 
         print(f"Pulling {parameter_id} data with stationid {station_id} from the DMI API")
         while True:
-            pull_time, records = API.pull_datetime(station_id=station_id, parameter_id=parameter_id, limit=limit,
+            pull_time, records = api.pull_datetime(station_id=station_id, parameter_id=parameter_id, limit=limit,
                                                    start_time=from_time, offset=offset)
             if not records:
                 print("No more new records.")
@@ -95,7 +95,7 @@ class ETLProcess:
         self.crud.db.close()
 
     def spec_etl(self, from_time: str = "2026-03-09T00:00:00Z", max_pulls: int = None, limit: int = 5000):
-        API = SpecAPI()
+        api = SpecAPI()
         start_time = time.time()
         total_pulls = 0
         avoid_ids = set()
@@ -103,7 +103,7 @@ class ETLProcess:
 
         print("Pulling data from the Specialisterne API")
         while True:
-            pull_time, records = API.pull_from(limit=limit, from_time=from_time)
+            pull_time, records = api.pull_from(limit=limit, from_time=from_time)
 
             if avoid_ids:
                 records = self.remove_rows_by_id(records, avoid_ids)

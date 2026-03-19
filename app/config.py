@@ -7,15 +7,19 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+#Token for connecting to the Specialisterne API
 spec_token = os.getenv("SPEC_TOKEN")
 
-#local database
+#Variable to change whether you are running in Docker or not
+docker = True
+
+#local database connection details
 local_database_schema = {"database": os.getenv("LOCAL_DB"),
                    "user":os.getenv("LOCAL_USER"),
                    "password":os.getenv("LOCAL_PASSWORD"),
                    "host": os.getenv("LOCAL_HOST")}
 
-#Docker
+#Docker database connection details
 docker_database_schema = {
     "database": os.getenv("DB_NAME"),
     "user":os.getenv("DB_USER"),

@@ -24,7 +24,8 @@ The program's main functionalities are:
 
 As is, the program pulls data from 3 measuring stations at DMI: Jæbersborg, Ødum and Årslev.
 
-The program can run in docker, or it can create and write to a local PostgreSQL database. In both cases, it can either pull data once or at set time intervals while running. 
+The program can run in docker, or it can create and write to a local PostgreSQL database. 
+Furthermore, the program has two modes: pull data once or at set time intervals while running. 
 By design, the program is OS-agnostic but has only been tested on Windows.
 
 During the extraction process, the program will create/write to a JSON file ("etl_times.json") which holds the latest timestamps of each data source.
@@ -124,13 +125,13 @@ First
 The rest of the setup depends on whether you are running in Docker or with a local database. 
 
 If running in Docker:
-1. Download compose.ymal and Dockerfile. Place them next to main.py.
-2. Now go to .env and specify a Docker username, password and database name of your choice. See environment variables below.
+1. Download compose.yaml and Dockerfile. Place them next to main.py.
+2. Now go to .env and specify a Docker username, password and database name of your choice. See environment variables above.
 3. If you want the program to pull data only once, change ETL_mode to 'once' in .env.
 
 If running outside docker with a local database: 
-1. Edit the variable 'docker' in main.py to 'False'. 
-2. Go to .env and fill in your PostgreSQL username and password.By default, the user in PostgreSQL is "postgres". You should also specify a database name of your choice. See environment variables below.
+1. Edit the variable 'docker' in config.py to 'False'. 
+2. Go to .env and fill in your PostgreSQL username and password.By default, the user in PostgreSQL is "postgres". You should also specify a database name of your choice. See environment variables above.
 
 
 

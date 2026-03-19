@@ -15,8 +15,6 @@ class CRUD:
                                    local_database_schema["password"], local_database_schema["host"])
 
 
-
-
     def create_mult_rows(self,table_name:str, rows: list[dict], commit:bool = True, close:bool = True):
         """This method handles creating multiple new rows in a designated table of the database.
         rows must be a list of dictionaries, with keys being column names and values being, well... values.

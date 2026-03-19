@@ -57,8 +57,6 @@ class DatabaseInitializer:
 
         self.db.close()
 
-
-
     # The following method only runs when working with an external database.
     def create_db(self):
         """This method creates the initial database"""
