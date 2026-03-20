@@ -29,12 +29,8 @@ class ETLProcess:
 
             time.sleep(interval_seconds)
 
-
-
-
-
     def update_database(self):
-        """This method handles all of the various ETLs"""
+        """This method handles all the various ETLs"""
         times_dict = self.get_start_times()
 
         # This handles the old specialisterne etl

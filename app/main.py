@@ -9,8 +9,8 @@ def main():
     initializer.create_db()
     initializer.initialize_db()
 
-    #crud = CRUD()
-    #crud.reset_everything()
+    # crud = CRUD()
+    # crud.reset_everything()
 
     etl_process = ETLProcess(docker=docker)
 
