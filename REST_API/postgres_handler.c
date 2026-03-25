@@ -40,11 +40,7 @@ char *formatResultAsJson(PGresult *result) {
     int numFields = PQnfields(result);
     int numRows = PQntuples(result);
 
-    // Calcula o tamanho total necessário para a string JSON -> para não estourar o buffer
     int totalSize = numRows * (2 + numFields * 256) + numRows - 1 + 3;
-    // Cada campo contribui com pelo menos 256 caracteres, 2 para aspas e 1 para vírgula
-    // numRows - 1 é para as vírgulas entre objetos JSON
-    // 3 é para as chaves finais e terminador de string
 
     char *json = (char *)malloc(totalSize);
     json[0] = '\0';
