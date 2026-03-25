@@ -1,0 +1,35 @@
+{
+    "configurations": [
+        {
+            "name": "MSYS64 UCRT64",
+            "includePath": [
+                "${workspaceFolder}",
+                "${workspaceFolder}/headers",
+                "C:\\msys64\\ucrt64\\include",
+                "C:/msys64/ucrt64/include"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "__MINGW32__",
+                "__MINGW64__"
+            ],
+            "compilerPath": "C:\\msys64\\ucrt64\\bin\\gcc.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64",
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "C:\\msys64\\ucrt64\\include",
+                    "C:\\msys64\\ucrt64\\lib"
+                ],
+                "limitSymbolsToIncludedHeaders": false,
+                "databaseFilename": "${workspaceFolder}/.vscode/.browse.VC.db"
+            }
+        }
+    ],
+    "version": 4
+}

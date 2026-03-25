@@ -22,7 +22,7 @@ typedef struct {
 typedef struct {
   int id;
   char *name;
-  char *email;
+  char *password;
 } USER;
 
 char *simple_message(const char *message_str);

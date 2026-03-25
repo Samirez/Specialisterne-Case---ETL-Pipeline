@@ -1,0 +1,19 @@
+{
+    "C_Cpp.default.configurationName": "MSYS64 UCRT64",
+    "C_Cpp.default.compilerPath": "C:\\msys64\\ucrt64\\bin\\gcc.exe",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}",
+        "${workspaceFolder}/headers",
+        "C:\\msys64\\ucrt64\\include"
+    ],
+    "C_Cpp.default.defines": [
+        "__MINGW32__",
+        "__MINGW64__"
+    ],
+    "C_Cpp.default.intelliSenseEngine": "Tag Parser",
+    "C_Cpp.intelliSenseEngine": "Tag Parser",
+    "C_Cpp.inactiveRegionOpacity": 0.55,
+    "files.exclude": {
+        "**/.git": true
+    }
+}
