@@ -4,3 +4,6 @@
 .env
 /app/etl_times.json
 Kravspecification.docx
+/REST_API/REST_API.exe
+/REST_API/build/
+/REST_API/CMakeFiles/
