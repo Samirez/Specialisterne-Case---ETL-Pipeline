@@ -20,11 +20,6 @@ typedef struct {
   HTTP_status status;
 } HTTP_response;
 
-typedef struct {
-  int id;
-  char *name;
-  char *password;
-} USER;
 
 char *simple_message(const char *message_str);
 
@@ -34,6 +29,5 @@ bool validate_method(const char *method, char *valid_method);
 
 bool validate_route(const char *url, char *route);
 
-void hash_password(const char *password, unsigned char *hashed_password);
 
 #endif

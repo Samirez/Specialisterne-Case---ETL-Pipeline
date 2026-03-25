@@ -1,6 +1,7 @@
 #ifndef HUMIDITY_DATA_HANDLER_H
-#define HUMIDITY_DATA_HANDLER_H#include "utils.h"
+#define HUMIDITY_DATA_HANDLER_H
 
+#include "utils.h"
 HTTP_response get_all_BME280(const char* url);
 
 HTTP_response get_BME280_by_id(const char* url);

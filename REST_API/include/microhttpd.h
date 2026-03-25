@@ -2655,8 +2655,11 @@ typedef enum MHD_Result
  * (#MHD_HTTP_METHOD_GET, #MHD_HTTP_METHOD_PUT, #MHD_HTTP_METHOD_DELETE,
  * #MHD_HTTP_METHOD_POST, etc).
  *
- * The callback must call MHD_queue_response() to provide content to the
- * client and then return #MHD_YES (or #MHD_NO on a fatal handling error).
+ * Once the application is ready to respond, the callback must call
+ * MHD_queue_response() to provide content to the client and then return
+ * #MHD_YES (or #MHD_NO on a fatal handling error). Earlier invocations may
+ * return #MHD_YES without queuing a response while request state is still
+ * being accumulated or upload data is being processed.
  * The response can be created
  * in this callback or prepared in advance.
  * Alternatively, callback may call MHD_suspend_connection() to temporarily
