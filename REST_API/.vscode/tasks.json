@@ -19,8 +19,7 @@
         {
             "label": "Run REST_API",
             "type": "shell",
-            "command": "C:\\msys64\\ucrt64.exe",
-            "args": [
+            "command": "${env:MSYS2_ROOT}/ucrt64.exe",            "args": [
                 "bash",
                 "-c",
                 "cd '${workspaceFolder}' && ./REST_API.exe"

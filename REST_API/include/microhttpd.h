@@ -1634,7 +1634,7 @@ enum MHD_DAuthBindNonce
    * This value implies #MHD_DAUTH_BIND_NONCE_URI.
    * Not recommended for that same reasons as #MHD_DAUTH_BIND_NONCE_URI.
    */
-  MHD_DAUTH_BIND_NONCE_URI_PARAMS = 1 << 2,
+  MHD_DAUTH_BIND_NONCE_URI_PARAMS = MHD_DAUTH_BIND_NONCE_URI | (1 << 2),
 
   /**
    * Generated nonces are valid only for the single client's IP.
@@ -2655,9 +2655,9 @@ typedef enum MHD_Result
  * (#MHD_HTTP_METHOD_GET, #MHD_HTTP_METHOD_PUT, #MHD_HTTP_METHOD_DELETE,
  * #MHD_HTTP_METHOD_POST, etc).
  *
- * The callback must call MHD function MHD_queue_response() to provide content
- * to give back to the client and return an HTTP status code (i.e.
- * #MHD_HTTP_OK, #MHD_HTTP_NOT_FOUND, etc.). The response can be created
+ * The callback must call MHD_queue_response() to provide content to the
+ * client and then return #MHD_YES (or #MHD_NO on a fatal handling error).
+ * The response can be created
  * in this callback or prepared in advance.
  * Alternatively, callback may call MHD_suspend_connection() to temporarily
  * suspend data processing for this connection.

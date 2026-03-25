@@ -24,11 +24,10 @@ if(LIBPQ_HEADER AND LIBPQ_LIBRARY)
     message(STATUS "Found libpq: ${LIBPQ_LIBRARY}")
     get_filename_component(PostgreSQL_INCLUDE_DIR ${LIBPQ_HEADER} DIRECTORY)
 else()
-    message(WARNING "libpq not found in MSYS64. Please install: pacman -S mingw-w64-ucrt64-postgresql")
-    set(PostgreSQL_INCLUDE_DIR "C:/msys64/ucrt64/include")
-    set(LIBPQ_LIBRARY "C:/msys64/ucrt64/lib/libpq.dll.a")
+    message(FATAL_ERROR "libpq not found. Please install PostgreSQL:\n"
+        "  MSYS64: pacman -S mingw-w64-ucrt-x86_64-postgresql\n"
+        "  Or set LIBPQ_LIBRARY and PostgreSQL_INCLUDE_DIR manually.")
 endif()
-
 add_executable(REST_API main.c utils.c headers/utils.h)
 
 if(fmt_FOUND)

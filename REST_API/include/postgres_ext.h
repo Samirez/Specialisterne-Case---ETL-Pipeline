@@ -25,6 +25,8 @@
 #define POSTGRES_EXT_H
 
 #include <stdint.h>
+#include <limits.h>
+#include <stdlib.h>
 
 /*
  * Object ID is a fundamental type in Postgres.

@@ -7,10 +7,13 @@ HTTP_response get_all_BME280(const char* url)
 {
     const char* query = "SELECT * FROM bme280_data";
     char* jsonResult = executeQueryToJson(query);
+    if (jsonResult == NULL) {
+        HTTP_response response = {NULL, INTERNAL_SERVER_ERROR};
+        return response;
+    }
     HTTP_response response = {jsonResult, OK};
     return response;
 }
-
 HTTP_response get_BME280_by_id(const char* url)
 {
     int id;

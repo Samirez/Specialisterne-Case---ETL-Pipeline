@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <openssl/sha.h>
 
 typedef enum {
   OK = 200,
@@ -32,5 +33,7 @@ HTTP_response validate_result(char *result);
 bool validate_method(const char *method, char *valid_method);
 
 bool validate_route(const char *url, char *route);
+
+void hash_password(const char *password, unsigned char *hashed_password);
 
 #endif
