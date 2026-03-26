@@ -4,8 +4,11 @@
 #include <signal.h>
 #include <microhttpd.h>
 #include "headers/handler.h"
+#ifdef _WIN32
 #include <windows.h>
-
+#else
+#include <unistd.h>
+#endif
 const int PORT = 8080;
 
 // Forward declaration or ensure default_handler is defined in handler.h
@@ -33,8 +36,16 @@ int main()
         return EXIT_FAILURE;
     }
     // Placeholder for server loop
-    while (!shutdown_requested) {
-        Sleep(100);
+    while (!shutdown_requested) 
+    {
+        #ifdef _WIN32
+                Sleep(100);
+        #else
+                struct timespec ts;
+                ts.tv_sec = 0;
+                ts.tv_nsec = 100 * 1000 * 1000; // 100ms
+                nanosleep(&ts, NULL);
+        #endif
     }
 
     printf("Shutdown requested. Exiting cleanly.\n");
