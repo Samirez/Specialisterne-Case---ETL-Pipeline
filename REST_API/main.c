@@ -38,14 +38,14 @@ int main()
     // Placeholder for server loop
     while (!shutdown_requested) 
     {
-        #ifdef _WIN32
-                Sleep(100);
-        #else
-                struct timespec ts;
-                ts.tv_sec = 0;
-                ts.tv_nsec = 100 * 1000 * 1000; // 100ms
-                nanosleep(&ts, NULL);
-        #endif
+    #ifdef _WIN32
+            Sleep(100);
+    #else
+            struct timespec ts;
+            ts.tv_sec = 0;
+            ts.tv_nsec = 100 * 1000 * 1000; // 100ms
+            nanosleep(&ts, NULL);
+    #endif
     }
 
     printf("Shutdown requested. Exiting cleanly.\n");
