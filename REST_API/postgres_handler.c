@@ -4,14 +4,63 @@
 #include <libpq-fe.h>
 #include "headers/postgres_handler.h"
 
+static const char *getEnvWithFallback(const char *primary, const char *fallback) {
+    const char *value = getenv(primary);
+    if (value != NULL && strlen(value) > 0) {
+        return value;
+    }
+
+    if (fallback != NULL) {
+        value = getenv(fallback);
+        if (value != NULL && strlen(value) > 0) {
+            return value;
+        }
+    }
+
+    return NULL;
+}
+
 char *executeQueryToJson(const char *query) {
-    PGconn *conn = PQconnectdb(
-        "user=" DB_USER
-        " password=" DB_PASSWORD
-        " dbname=" DB_NAME
-        " host=" DB_HOST
-        " port=" DB_PORT
+    const char *dbUser = getEnvWithFallback("DB_USERNAME", "DB_USER");
+    const char *dbPassword = getEnvWithFallback("DB_PASSWORD", NULL);
+    const char *dbName = getEnvWithFallback("DB_NAME", NULL);
+    const char *dbHost = getEnvWithFallback("DB_HOST", NULL);
+    const char *dbPort = getEnvWithFallback("DB_PORT", NULL);
+
+    if (dbUser == NULL || dbPassword == NULL || dbName == NULL || dbHost == NULL || dbPort == NULL) {
+        fprintf(stderr, "Database connection configuration is incomplete. Missing:");
+        if (dbUser == NULL) {
+            fprintf(stderr, " DB_USERNAME/DB_USER");
+        }
+        if (dbPassword == NULL) {
+            fprintf(stderr, " DB_PASSWORD");
+        }
+        if (dbName == NULL) {
+            fprintf(stderr, " DB_NAME");
+        }
+        if (dbHost == NULL) {
+            fprintf(stderr, " DB_HOST");
+        }
+        if (dbPort == NULL) {
+            fprintf(stderr, " DB_PORT");
+        }
+        fprintf(stderr, "\n");
+        return NULL;
+    }
+
+    char conninfo[1024];
+    snprintf(
+        conninfo,
+        sizeof(conninfo),
+        "user=%s password=%s dbname=%s host=%s port=%s",
+        dbUser,
+        dbPassword,
+        dbName,
+        dbHost,
+        dbPort
     );
+
+    PGconn *conn = PQconnectdb(conninfo);
 
     if (PQstatus(conn) != CONNECTION_OK) {
         fprintf(stderr, "Connection to database failed: %s", PQerrorMessage(conn));

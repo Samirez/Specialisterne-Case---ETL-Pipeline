@@ -8,6 +8,8 @@
             "args": [
                 "-I${workspaceFolder}/headers",
                 "-I${workspaceFolder}/include",
+                "-Wall",
+                "-Wextra",
                 "${workspaceFolder}/main.c",
                 "${workspaceFolder}/user_handler.c",
                 "${workspaceFolder}/response_builder.c",
@@ -15,8 +17,7 @@
                 "${workspaceFolder}/postgres_handler.c",
                 "${workspaceFolder}/humidity_data_handler.c",
                 "-o",
-                "${workspaceFolder}/REST_API_check.exe",
-                "-L",
+                "${workspaceFolder}/REST_API.exe",                "-L",
                 "C:/msys64/ucrt64/lib",
                 "-lcrypto",
                 "-lssl",
@@ -43,7 +44,7 @@
         {
             "label": "Run REST_API",
             "type": "shell",
-            "command": "${env:MSYS2_ROOT}/ucrt64.exe",            "args": [
+            "command": "C:/msys64/ucrt64.exe",            "args": [
                 "bash",
                 "-c",
                 "cd '${workspaceFolder}' && ./REST_API.exe"

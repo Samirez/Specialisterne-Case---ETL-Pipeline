@@ -5,6 +5,7 @@
 
 HTTP_response get_all_BME280(const char* url)
 {
+    (void)url;
     const char* query = "SELECT * FROM bme280_data";
     char* jsonResult = executeQueryToJson(query);
     if (jsonResult == NULL) {
@@ -27,6 +28,7 @@ HTTP_response get_BME280_by_id(const char* url)
 
 HTTP_response get_all_DMI(const char* url)
 {
+    (void)url;
     const char* query = "SELECT * FROM dmi_data";
     char* jsonResult = executeQueryToJson(query);
     HTTP_response response = {jsonResult, OK};
@@ -46,6 +48,7 @@ HTTP_response get_DMI_by_id(const char* url)
 
 HTTP_response get_all_DS18B20(const char* url)
 {
+    (void)url;
     const char* query = "SELECT * FROM ds18b20_data";
     char* jsonResult = executeQueryToJson(query);
     HTTP_response response = {jsonResult, OK};
@@ -65,6 +68,7 @@ HTTP_response get_DS18B20_by_id(const char* url)
 
 HTTP_response get_all_SCD41(const char* url)
 {
+    (void)url;
     const char* query = "SELECT * FROM scd41_data";
     char* jsonResult = executeQueryToJson(query);
     HTTP_response response = {jsonResult, OK};

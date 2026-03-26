@@ -1,4 +1,6 @@
 #include "headers/utils.h"
+#include <openssl/rand.h>
+#include <openssl/evp.h>
 
 char *simple_message(const char *message_str) {
     if (message_str == NULL) {

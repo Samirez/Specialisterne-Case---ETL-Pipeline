@@ -1,7 +1,25 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": []
+"version": "0.2.0",
+"configurations": [
+{
+"name": "Debug REST API",
+"type": "cppdbg",
+"request": "launch",
+"program": "${workspaceFolder}/REST_API/REST_API_check.exe",
+"args": [],
+"stopAtEntry": false,
+"cwd": "${workspaceFolder}",
+"environment": [
+{ "name": "DB_USERNAME", "value": "your_user" },
+{ "name": "DB_PASSWORD", "value": "your_password" },
+{ "name": "DB_NAME", "value": "your_database" },
+{ "name": "DB_HOST", "value": "your_host" },
+{ "name": "DB_PORT", "value": "5432" }
+],
+"externalConsole": false,
+"MIMode": "gdb",
+"miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",
+"preLaunchTask": "Build REST_API (UCRT64)"
+}
+]
 }

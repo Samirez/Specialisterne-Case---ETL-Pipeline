@@ -5,6 +5,9 @@
             "label": "Build REST_API (UCRT64)",
             "command": "C:/msys64/ucrt64/bin/gcc.exe",
             "args": [
+                "-g",
+                "-Wall",
+                "-Wextra",
                 "-I${workspaceFolder}/REST_API/headers",
                 "-I${workspaceFolder}/REST_API/include",
                 "${workspaceFolder}/REST_API/main.c",
@@ -17,8 +20,9 @@
                 "${workspaceFolder}/REST_API/REST_API_check.exe",
                 "-L",
                 "C:/msys64/ucrt64/lib",
-                "-lcrypto",
                 "-lssl",
+                "-lcrypto",
+                "-lpq",
                 "-lpq",
                 "-lmicrohttpd"
             ],
@@ -43,12 +47,27 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${file}",
+                "-Wall",
+                "-Wextra",
+                "-I${workspaceFolder}/REST_API/headers",
+                "-I${workspaceFolder}/REST_API/include",
+                "${workspaceFolder}/REST_API/main.c",
+                "${workspaceFolder}/REST_API/user_handler.c",
+                "${workspaceFolder}/REST_API/response_builder.c",
+                "${workspaceFolder}/REST_API/utils.c",
+                "${workspaceFolder}/REST_API/postgres_handler.c",
+                "${workspaceFolder}/REST_API/humidity_data_handler.c",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "${workspaceFolder}/REST_API/REST_API_check.exe",
+                "-L",
+                "C:/msys64/ucrt64/lib",
+                "-lssl",
+                "-lcrypto",
+                "-lpq",
+                "-lmicrohttpd"
             ],
             "options": {
-                "cwd": "C:/msys64/ucrt64/bin",
+                "cwd": "${workspaceFolder}/REST_API",
                 "env": {
                     "PATH": "C:/msys64/ucrt64/bin;C:/msys64/usr/bin;${env:PATH}"
                 }
