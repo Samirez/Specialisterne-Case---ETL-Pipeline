@@ -3,11 +3,10 @@
 
 #include <setjmp.h>
 
-extern jmp_buf exceptionBuffer;
+extern _Thread_local jmp_buf exceptionBuffer;
 
 #define TRY if (setjmp(exceptionBuffer) == 0)
 #define CATCH else
-
 void log_api(const char *url, const char *method);
 
 enum MHD_Result default_handler(

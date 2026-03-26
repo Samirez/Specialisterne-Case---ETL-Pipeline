@@ -8,9 +8,9 @@
 #include <windows.h>
 #else
 #include <unistd.h>
+#include <time.h>
 #endif
 const int PORT = 8080;
-MHD_AccessHandlerCallback callback = default_handler;
 static volatile sig_atomic_t shutdown_requested = 0;
 
 static void handle_shutdown_signal(int signal_number)
