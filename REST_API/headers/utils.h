@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <openssl/sha.h>
+#include <openssl/rand.h>
+#include <openssl/evp.h>
 
 typedef enum {
   OK = 200,

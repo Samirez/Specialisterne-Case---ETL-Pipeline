@@ -32,15 +32,3 @@ bool validate_route(const char *url, char *route) {
     }
     return strcmp(url, route) == 0;
 }
-
-void hash_password(const char *password, unsigned char *hashed_password) {
-    if (password == NULL || hashed_password == NULL) {
-        return;
-    }
-    SHA256((unsigned char *)password, strlen(password), hashed_password);
-    unsigned char salt[32];
-    RAND_bytes(salt, sizeof(salt));
-    unsigned char salted_password[256+32];
-    memcpy(salted_password, password, strlen(password));
-    memcpy(salted_password + strlen(password), salt, sizeof(salt));
-}

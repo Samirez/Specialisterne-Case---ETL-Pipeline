@@ -4,7 +4,31 @@
         {
             "label": "Build REST_API",
             "type": "shell",
-            "command": "${workspaceFolder}\\build.bat",
+            "command": "C:/msys64/ucrt64/bin/gcc.exe",
+            "args": [
+                "-I${workspaceFolder}/headers",
+                "-I${workspaceFolder}/include",
+                "${workspaceFolder}/main.c",
+                "${workspaceFolder}/user_handler.c",
+                "${workspaceFolder}/response_builder.c",
+                "${workspaceFolder}/utils.c",
+                "${workspaceFolder}/postgres_handler.c",
+                "${workspaceFolder}/humidity_data_handler.c",
+                "-o",
+                "${workspaceFolder}/REST_API_check.exe",
+                "-L",
+                "C:/msys64/ucrt64/lib",
+                "-lcrypto",
+                "-lssl",
+                "-lpq",
+                "-lmicrohttpd"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PATH": "C:/msys64/ucrt64/bin;C:/msys64/usr/bin;${env:PATH}"
+                }
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
