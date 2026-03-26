@@ -3,11 +3,10 @@
 #include <setjmp.h>
 #include "headers/handler.h"
 
-jmp_buf exceptionBuffer;
+_Thread_local jmp_buf exceptionBuffer;
 
 #define TRY if (setjmp(exceptionBuffer) == 0)
 #define CATCH else
-
 void log_api(const char *url, const char *method) {
   printf("[%s] %s\n", method, url);
 }
@@ -55,16 +54,17 @@ enum MHD_Result default_handler(
       .status = INTERNAL_SERVER_ERROR
     };
 
-    printf("Internal server error");
-  }
+    printf("Internal server error\n");  }
 
   response = HTTP_build_response_JSON(response_api.body);
 
-  if (!response)
+  if (!response) {
+    free(response_api.body);
     return MHD_NO;
+  }
 
   ret = MHD_queue_response(connection, response_api.status, response);
   MHD_destroy_response(response);
+  free(response_api.body);
 
-  return ret;
-}
+  return ret;}

@@ -2,7 +2,7 @@
   "registries": [
     {
       "kind": "artifact",
-      "location": "https://github.com/microsoft/vcpkg-ce-catalog/archive/refs/tags/<TAG>.zip",
+      "location": "https://github.com/microsoft/vcpkg-ce-catalog/archive/refs/tags/2024-09-30.zip",
       "name": "microsoft"
     }
   ]

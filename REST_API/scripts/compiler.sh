@@ -5,7 +5,7 @@ set -e
 
 mkdir -p bin
 
-gcc -o bin/main src/*.c -lmicrohttpd -I/usr/include/postgresql -L/usr/lib/x86_64-linux-gnu -lpq
+gcc -o bin/main src/*.c -lmicrohttpd $(pkg-config --cflags --libs libpq) -Wall -Wextra
 
 if [[ "$1" == "--run" ]]; then
   echo "Executando a aplicação..."

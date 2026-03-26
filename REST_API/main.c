@@ -4,6 +4,7 @@
 #include <signal.h>
 #include <microhttpd.h>
 #include "headers/handler.h"
+#include <windows.h>
 
 const int PORT = 8080;
 
@@ -33,9 +34,7 @@ int main()
     }
     // Placeholder for server loop
     while (!shutdown_requested) {
-        // Handle incoming requests
-        // This is where you would accept connections and process them
-
+        Sleep(100);
     }
 
     printf("Shutdown requested. Exiting cleanly.\n");

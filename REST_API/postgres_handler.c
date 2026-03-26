@@ -9,8 +9,11 @@ static int ensure_capacity(char **buffer, size_t *capacity, size_t required_len)
         return 0;
     }
 
-    size_t new_capacity = *capacity;
+    size_t new_capacity = *capacity ? *capacity : 1;
     while (required_len + 1 > new_capacity) {
+        if (new_capacity > SIZE_MAX / 2) {
+            return -1;  // Overflow protection
+        }
         new_capacity *= 2;
     }
 
@@ -23,7 +26,6 @@ static int ensure_capacity(char **buffer, size_t *capacity, size_t required_len)
     *capacity = new_capacity;
     return 0;
 }
-
 static int append_char(char **buffer, size_t *length, size_t *capacity, char c) {
     if (ensure_capacity(buffer, capacity, *length + 1) != 0) {
         return -1;
@@ -201,7 +203,6 @@ char *formatResultAsJson(PGresult *result) {
 
         for (int j = 0; j < numFields; ++j) {
             char *fieldName = PQfname(result, j);
-            char *fieldValue = PQgetvalue(result, i, j);
 
             if (j > 0) {
                 if (append_char(&json, &length, &capacity, ',') != 0) {
@@ -218,17 +219,30 @@ char *formatResultAsJson(PGresult *result) {
                 free(json);
                 return NULL;
             }
-            if (append_str(&json, &length, &capacity, "\":\"") != 0) {
+            if (append_str(&json, &length, &capacity, "\":") != 0) {
                 free(json);
                 return NULL;
             }
-            if (append_json_escaped(&json, &length, &capacity, fieldValue) != 0) {
-                free(json);
-                return NULL;
-            }
-            if (append_char(&json, &length, &capacity, '"') != 0) {
-                free(json);
-                return NULL;
+
+            if (PQgetisnull(result, i, j)) {
+                if (append_str(&json, &length, &capacity, "null") != 0) {
+                    free(json);
+                    return NULL;
+                }
+            } else {
+                char *fieldValue = PQgetvalue(result, i, j);
+                if (append_char(&json, &length, &capacity, '"') != 0) {
+                    free(json);
+                    return NULL;
+                }
+                if (append_json_escaped(&json, &length, &capacity, fieldValue) != 0) {
+                    free(json);
+                    return NULL;
+                }
+                if (append_char(&json, &length, &capacity, '"') != 0) {
+                    free(json);
+                    return NULL;
+                }
             }
         }
 
