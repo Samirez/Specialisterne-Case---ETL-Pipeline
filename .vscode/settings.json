@@ -1,5 +1,5 @@
 {
-    "C_Cpp.default.compilerPath": "C:/msys64/ucrt64/bin/gcc.exe",
-    "cmake.sourceDirectory": "C:/Users/SPAC-O-9/OneDrive - Specialisterne/Dokumenter/Specialisterne_kursus/REST_API_uge_8/Specialisterne-Case---ETL-Pipeline/REST_API",
+    "C_Cpp.default.compilerPath": "${env:MSYS2_ROOT}/ucrt64/bin/gcc.exe",
+    "cmake.sourceDirectory": "${workspaceFolder}/REST_API",
     "C_Cpp.errorSquiggles": "enabled"
 }

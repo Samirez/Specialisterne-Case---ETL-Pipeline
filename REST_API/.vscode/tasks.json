@@ -17,7 +17,8 @@
                 "${workspaceFolder}/postgres_handler.c",
                 "${workspaceFolder}/humidity_data_handler.c",
                 "-o",
-                "${workspaceFolder}/REST_API.exe",                "-L",
+                "${workspaceFolder}/REST_API.exe",
+                "-L",
                 "C:/msys64/ucrt64/lib",
                 "-lcrypto",
                 "-lssl",
@@ -44,9 +45,9 @@
         {
             "label": "Run REST_API",
             "type": "shell",
-            "command": "C:/msys64/ucrt64.exe",            "args": [
-                "bash",
-                "-c",
+            "command": "${env:MSYS2_ROOT}/usr/bin/bash.exe",
+            "args": [
+                "-lc",
                 "cd '${workspaceFolder}' && ./REST_API.exe"
             ],
             "group": {

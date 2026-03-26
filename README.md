@@ -197,6 +197,32 @@ If running outside docker with a local database:
 
 
 ## Help
+### Local VS Code workspace setup
+This repository uses portable defaults in `.vscode/settings.json`:
+- `C_Cpp.default.compilerPath` = `${env:MSYS2_ROOT}/ucrt64/bin/gcc.exe`
+- `cmake.sourceDirectory` = `${workspaceFolder}/REST_API`
+
+If your machine uses a different compiler path, set these keys in VS Code User Settings (recommended) or in your own local workspace settings.
+
+Example User Settings entries:
+```json
+"C_Cpp.default.compilerPath": "C:/msys64/ucrt64/bin/gcc.exe",
+"cmake.sourceDirectory": "${workspaceFolder}/REST_API"
+```
+
+On Windows with MSYS2, set `MSYS2_ROOT` (for example `C:/msys64`) so the workspace compiler path resolves correctly.
+The workspace build tasks in `.vscode/tasks.json` also depend on `MSYS2_ROOT`; set it in your OS environment so `${env:MSYS2_ROOT}/ucrt64/bin/gcc.exe` and related PATH entries resolve during task execution.
+`REST_API/.vscode/c_cpp_properties.json` also uses `MSYS2_ROOT` for include, browse, and compiler paths, so IntelliSense requires the same variable.
+
+### VS Code debug setup (REST API)
+The repository-level debug configuration in `.vscode/launch.json` intentionally contains no database credentials and no hardcoded debugger path.
+
+To run the REST API debug target, either:
+- set `DB_USERNAME` (or `DB_USER`), `DB_PASSWORD`, `DB_NAME`, `DB_HOST`, and `DB_PORT` in your OS/user environment, and ensure `gdb` is available on your `PATH`; or
+- create a local, git-ignored `.vscode/launch.local.json` file with your personal debug configuration and real values.
+
+If you use MSYS2 and `gdb` is not on `PATH`, add it (for example, `C:/msys64/ucrt64/bin`) before launching VS Code.
+
 When running in docker, if there are issues during the build, ensure that in requirements.txt you have 
 ```
 psycopg2-binary

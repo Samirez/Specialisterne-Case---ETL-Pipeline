@@ -9,20 +9,23 @@ if(NOT fmt_FOUND)
 endif()
 
 # Manually configure PostgreSQL paths for MSYS64
-# Try to locate libpq in MSYS64
-find_file(LIBPQ_HEADER NAMES libpq-fe.h 
-    PATHS C:/msys64/ucrt64/include
-          C:/msys64/mingw64/include
-    NO_DEFAULT_PATH)
+# Honor user-provided cache/CLI overrides before searching default MSYS64 paths.
+if(NOT LIBPQ_LIBRARY)
+    find_library(LIBPQ_LIBRARY NAMES pq libpq
+        PATHS C:/msys64/ucrt64/lib
+              C:/msys64/mingw64/lib
+        NO_DEFAULT_PATH)
+endif()
 
-find_library(LIBPQ_LIBRARY NAMES pq libpq
-    PATHS C:/msys64/ucrt64/lib
-          C:/msys64/mingw64/lib
-    NO_DEFAULT_PATH)
+if(NOT PostgreSQL_INCLUDE_DIR)
+    find_path(PostgreSQL_INCLUDE_DIR NAMES libpq-fe.h
+        PATHS C:/msys64/ucrt64/include
+              C:/msys64/mingw64/include
+        NO_DEFAULT_PATH)
+endif()
 
-if(LIBPQ_HEADER AND LIBPQ_LIBRARY)
+if(PostgreSQL_INCLUDE_DIR AND LIBPQ_LIBRARY)
     message(STATUS "Found libpq: ${LIBPQ_LIBRARY}")
-    get_filename_component(PostgreSQL_INCLUDE_DIR ${LIBPQ_HEADER} DIRECTORY)
 else()
     message(FATAL_ERROR "libpq not found. Please install PostgreSQL:\n"
         "  MSYS64: pacman -S mingw-w64-ucrt-x86_64-postgresql\n"

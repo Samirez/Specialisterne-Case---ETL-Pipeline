@@ -1,12 +1,11 @@
 #ifndef USER_HANDLER_H
 #define USER_HANDLER_H
 #include "utils.h"
-
 typedef struct {
   int id;
   char *name;
-  char *password_hash;
-  int password_iterations;
+  unsigned char *password_hash;
+  unsigned int password_iterations;
 } USER;
 
 // Public password-hashing parameters for callers that allocate buffers.
@@ -30,6 +29,6 @@ HTTP_response create_user(const char* url, const char* upload_data);
 //   hash_len: Length of hashed_password buffer (should be at least HASH_LENGTH = 32 bytes)
 //   iterations_out: Optional output pointer for effective PBKDF2 iteration count used
 // Returns: 0 on success, negative value on error
-int hash_password(const char *password, unsigned char *salt_out, size_t salt_len, unsigned char *hashed_password, size_t hash_len, int *iterations_out);
+int hash_password(const char *password, unsigned char *salt_out, size_t salt_len, unsigned char *hashed_password, size_t hash_len, unsigned int *iterations_out);
 
 #endif

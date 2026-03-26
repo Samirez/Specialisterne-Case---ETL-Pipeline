@@ -1,14 +1,100 @@
 #include "user_handler.h"
 #include <errno.h>
 #include <limits.h>
+#include <openssl/crypto.h>
 #include <openssl/rand.h>
 #include <openssl/evp.h>
 
-static void secure_memzero(void *ptr, size_t len) {
-    volatile unsigned char *p = (volatile unsigned char *)ptr;
-    while (len--) {
-        *p++ = 0;
+static int hex_value(char c) {
+    if (c >= '0' && c <= '9') {
+        return c - '0';
     }
+    if (c >= 'a' && c <= 'f') {
+        return c - 'a' + 10;
+    }
+    if (c >= 'A' && c <= 'F') {
+        return c - 'A' + 10;
+    }
+    return -1;
+}
+
+static int url_decode_into(const char *src, size_t src_len, char *dst, size_t dst_size) {
+    size_t i = 0;
+    size_t j = 0;
+
+    if (dst_size == 0) {
+        return -1;
+    }
+
+    while (i < src_len) {
+        unsigned char out_char;
+
+        if (src[i] == '+') {
+            out_char = ' ';
+            i++;
+        } else if (src[i] == '%') {
+            int hi;
+            int lo;
+            if (i + 2 >= src_len) {
+                return -1;
+            }
+            hi = hex_value(src[i + 1]);
+            lo = hex_value(src[i + 2]);
+            if (hi < 0 || lo < 0) {
+                return -1;
+            }
+            out_char = (unsigned char)((hi << 4) | lo);
+            i += 3;
+        } else {
+            out_char = (unsigned char)src[i];
+            i++;
+        }
+
+        if (j + 1 >= dst_size) {
+            return -1;
+        }
+        dst[j++] = (char)out_char;
+    }
+
+    dst[j] = '\0';
+    return 0;
+}
+
+static int parse_form_credentials(const char *upload_data, char *username, size_t username_size, char *password, size_t password_size) {
+    const char *pair_start = upload_data;
+    int username_found = 0;
+    int password_found = 0;
+
+    while (pair_start != NULL && *pair_start != '\0') {
+        const char *pair_end = strchr(pair_start, '&');
+        size_t pair_len = pair_end != NULL ? (size_t)(pair_end - pair_start) : strlen(pair_start);
+        const char *eq = memchr(pair_start, '=', pair_len);
+
+        if (eq != NULL) {
+            size_t key_len = (size_t)(eq - pair_start);
+            const char *value_start = eq + 1;
+            size_t value_len = pair_len - key_len - 1;
+
+            if (key_len == 8 && strncmp(pair_start, "username", key_len) == 0) {
+                if (url_decode_into(value_start, value_len, username, username_size) != 0) {
+                    return -1;
+                }
+                username_found = 1;
+            } else if (key_len == 8 && strncmp(pair_start, "password", key_len) == 0) {
+                if (url_decode_into(value_start, value_len, password, password_size) != 0) {
+                    return -1;
+                }
+                password_found = 1;
+            }
+        }
+
+        if (pair_end == NULL) {
+            break;
+        }
+        pair_start = pair_end + 1;
+    }
+
+    return (username_found && password_found) ? 0 : -1;
 }
 
 HTTP_response create_user(const char* url, const char* upload_data) {
@@ -18,11 +104,10 @@ HTTP_response create_user(const char* url, const char* upload_data) {
         return response;
     }
 
-    // Parse upload_data to extract username and password
+    // Parse form-urlencoded payload and decode percent-encoded credentials.
     char username[256] = {0};
     char password[256] = {0};
-    int parsed = sscanf(upload_data, "username=%255[^&]&password=%255s", username, password);
-    if (parsed != 2) {
+    if (parse_form_credentials(upload_data, username, sizeof(username), password, sizeof(password)) != 0) {
         HTTP_response response = {simple_message("Missing username or password"), BAD_REQUEST};
         return response;
     }
@@ -30,22 +115,36 @@ HTTP_response create_user(const char* url, const char* upload_data) {
     // Hash the password securely with salt
     unsigned char hashed_password[32];
     unsigned char salt[32];
-    int password_iterations = 0;
+    unsigned int password_iterations = 0;
     int hash_result = hash_password(password, salt, sizeof(salt), hashed_password, sizeof(hashed_password), &password_iterations);
     
     if (hash_result != 0) {
-        secure_memzero(password, sizeof(password));
-        secure_memzero(salt, sizeof(salt));
-        secure_memzero(hashed_password, sizeof(hashed_password));
+        OPENSSL_cleanse(password, sizeof(password));
+        OPENSSL_cleanse(salt, sizeof(salt));
+        OPENSSL_cleanse(hashed_password, sizeof(hashed_password));
 
         HTTP_response response = {simple_message("Error hashing password"), INTERNAL_SERVER_ERROR};
         return response;
     }
 
     // To do - Store the user in the database with salt, hashed_password, and password_iterations.
-    secure_memzero(password, sizeof(password));
-    secure_memzero(salt, sizeof(salt));
-    secure_memzero(hashed_password, sizeof(hashed_password));
+    // Example: store_result = store_user(username, salt, hashed_password, password_iterations);
+    int store_result = 0;
+
+    // Always clear plaintext password as soon as hashing is complete.
+    OPENSSL_cleanse(password, sizeof(password));
+
+    if (store_result != 0) {
+        OPENSSL_cleanse(salt, sizeof(salt));
+        OPENSSL_cleanse(hashed_password, sizeof(hashed_password));
+
+        HTTP_response response = {simple_message("Error storing user"), INTERNAL_SERVER_ERROR};
+        return response;
+    }
+
+    // Clear derived secrets after persistence completes.
+    OPENSSL_cleanse(salt, sizeof(salt));
+    OPENSSL_cleanse(hashed_password, sizeof(hashed_password));
     
     char response_message[512];
     snprintf(response_message, sizeof(response_message), "User created successfully!");    
@@ -76,7 +175,7 @@ static int resolve_pbkdf2_iterations(void) {
 }
 
 int hash_password(const char *password, unsigned char *salt_out, size_t salt_len,
-                  unsigned char *hashed_password, size_t hash_len, int *iterations_out) {
+                  unsigned char *hashed_password, size_t hash_len, unsigned int *iterations_out) {
     int pbkdf2_iterations;
 
     if (!password || !salt_out || !hashed_password) {
@@ -93,7 +192,7 @@ int hash_password(const char *password, unsigned char *salt_out, size_t salt_len
 
     pbkdf2_iterations = resolve_pbkdf2_iterations();
     if (iterations_out != NULL) {
-        *iterations_out = pbkdf2_iterations;
+        *iterations_out = (unsigned int)pbkdf2_iterations;
     }
 
     if (PKCS5_PBKDF2_HMAC(password,

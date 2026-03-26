@@ -5,8 +5,7 @@
             "includePath": [
                 "${workspaceFolder}",
                 "${workspaceFolder}/headers",
-                "C:\\msys64\\ucrt64\\include",
-                "C:/msys64/ucrt64/include"
+                "${env:MSYS2_ROOT}/ucrt64/include"
             ],
             "defines": [
                 "_DEBUG",
@@ -15,7 +14,7 @@
                 "__MINGW32__",
                 "__MINGW64__"
             ],
-            "compilerPath": "C:\\msys64\\ucrt64\\bin\\gcc.exe",
+            "compilerPath": "${env:MSYS2_ROOT}/ucrt64/bin/gcc.exe",
             "cStandard": "c11",
             "cppStandard": "c++17",
             "intelliSenseMode": "gcc-x64",
@@ -23,8 +22,8 @@
             "browse": {
                 "path": [
                     "${workspaceFolder}",
-                    "C:\\msys64\\ucrt64\\include",
-                    "C:\\msys64\\ucrt64\\lib"
+                    "${env:MSYS2_ROOT}/ucrt64/include",
+                    "${env:MSYS2_ROOT}/ucrt64/lib"
                 ],
                 "limitSymbolsToIncludedHeaders": false,
                 "databaseFilename": "${workspaceFolder}/.vscode/.browse.VC.db"
