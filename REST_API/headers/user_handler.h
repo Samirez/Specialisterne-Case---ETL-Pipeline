@@ -20,6 +20,8 @@ typedef struct {
 
 HTTP_response create_user(const char* url, const char* upload_data);
 
+HTTP_response user_router(const char* url, const char* method, const char* upload_data);
+
 // Securely hash a password using PBKDF2-HMAC-SHA256
 // Parameters:
 //   password: The plaintext password to hash

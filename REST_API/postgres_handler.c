@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 #include <libpq-fe.h>
 #include "headers/postgres_handler.h"
 

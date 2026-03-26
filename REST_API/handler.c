@@ -19,6 +19,10 @@ enum MHD_Result default_handler(
   char *url_str = (char *)url;
   char *method_str = (char *)method;
   int ret;
+  (void)cls; // silence unused parameter warning
+  (void)version;
+  (void)upload_data_size;
+  (void)con_cls;
 
   struct MHD_Response *response;
   HTTP_response response_api;
@@ -34,12 +38,7 @@ enum MHD_Result default_handler(
     }
     
     else if (validate_route(url_str, "/users")) {
-      // user_router appears to return status code (int), not HTTP_response.
-      // Wrap it into HTTP_response to match response_api type.
-      response_api = (HTTP_response){
-        .body = simple_message(""),
-        .status = user_router(url_str, method_str, upload_data)
-      };
+      response_api = user_router(url_str, method_str, upload_data);
     }
     
     else {

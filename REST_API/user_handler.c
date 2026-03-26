@@ -97,6 +97,14 @@ static int parse_form_credentials(const char *upload_data, char *username, size_
     return (username_found && password_found) ? 0 : -1;
 }
 
+HTTP_response user_router(const char* url, const char* method, const char* upload_data) {
+    if (strcmp(method, "POST") == 0 && validate_route(url, "/users/create")) {
+        return create_user(url, upload_data);
+    }
+    HTTP_response not_found = {simple_message("Not found"), NOT_FOUND};
+    return not_found;
+}
+
 HTTP_response create_user(const char* url, const char* upload_data) {
     (void)url;
     if (upload_data == NULL) {
