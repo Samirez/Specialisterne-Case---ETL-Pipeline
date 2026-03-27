@@ -45,9 +45,3 @@ HTTP_response get_SCD41_by_temperature_range(const char* url)
 {
     return get_temperature_by_range(url, "/scd41/temperature?min=%f&max=%f", "scd41_data");
 }
-
-
-HTTP_response get_SCD41_by_temperature_range(const char* url)
-{
-    return get_temperature_by_range(url, "/scd41/temperature?min=%f&max=%f", "scd41_data");
-}

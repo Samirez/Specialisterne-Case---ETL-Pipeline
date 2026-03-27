@@ -2,9 +2,8 @@
 #define TEMPERATURE_DATA_HANDLER_H
 #include "utils.h"
 
-static HTTP_response get_temperature_by_range(const char* url, const char* url_format, const char* table_name);
-
 // Expects "/dmi/temperature?min=<float>&max=<float>"; parsing happens in
+// get_temperature_by_range() in REST_API/temperature_data_handler.c.// Expects "/dmi/temperature?min=<float>&max=<float>"; parsing happens in
 // get_temperature_by_range() in REST_API/temperature_data_handler.c.
 HTTP_response get_DMI_by_temperature_range(const char* url);
 
