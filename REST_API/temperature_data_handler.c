@@ -3,12 +3,17 @@
 #include "headers/response_builder.h"
 #include "headers/utils.h"
 
-HTTP_response get_DMI_by_temperature_range(const char* url)
+static HTTP_response get_temperature_by_range(const char* url, const char* url_format, const char* table_name)
 {
     float min_temp, max_temp;
-    sscanf(url, "/dmi/temperature?min=%f&max=%f", &min_temp, &max_temp);
+    if (sscanf(url, url_format, &min_temp, &max_temp) != 2) {
+        HTTP_response response = {NULL, BAD_REQUEST};
+        return response;
+    }
     char query[256];
-    snprintf(query, sizeof(query), "SELECT * FROM dmi_data WHERE temperature >= %f AND temperature <= %f", min_temp, max_temp);
+    snprintf(query, sizeof(query), 
+             "SELECT * FROM %s WHERE temperature >= %f AND temperature <= %f", 
+             table_name, min_temp, max_temp);
     char* jsonResult = executeQueryToJson(query);
     if (jsonResult == NULL) {
         HTTP_response response = {NULL, INTERNAL_SERVER_ERROR};
@@ -16,52 +21,33 @@ HTTP_response get_DMI_by_temperature_range(const char* url)
     }
     HTTP_response response = {jsonResult, OK};
     return response;
+}
+
+HTTP_response get_DMI_by_temperature_range(const char* url)
+{
+    return get_temperature_by_range(url, "/dmi/temperature?min=%f&max=%f", "dmi_data");
 }
 
 
 HTTP_response get_DS18B20_by_temperature_range(const char* url)
 {
-    float min_temp, max_temp;
-    sscanf(url, "/ds18b20/temperature?min=%f&max=%f", &min_temp, &max_temp);
-    char query[256];
-    snprintf(query, sizeof(query), "SELECT * FROM ds18b20_data WHERE temperature >= %f AND temperature <= %f", min_temp, max_temp);
-    char* jsonResult = executeQueryToJson(query);
-    if (jsonResult == NULL) {
-        HTTP_response response = {NULL, INTERNAL_SERVER_ERROR};
-        return response;
-    }
-    HTTP_response response = {jsonResult, OK};
-    return response;
+    return get_temperature_by_range(url, "/ds18b20/temperature?min=%f&max=%f", "ds18b20_data");
 }
-
+    
 
 HTTP_response get_BME280_by_temperature_range(const char* url)
 {
-    float min_temp, max_temp;
-    sscanf(url, "/bme280/temperature?min=%f&max=%f", &min_temp, &max_temp);
-    char query[256];
-    snprintf(query, sizeof(query), "SELECT * FROM bme280_data WHERE temperature >= %f AND temperature <= %f", min_temp, max_temp);
-    char* jsonResult = executeQueryToJson(query);
-    if (jsonResult == NULL) {
-        HTTP_response response = {NULL, INTERNAL_SERVER_ERROR};
-        return response;
-    }
-    HTTP_response response = {jsonResult, OK};
-    return response;
+    return get_temperature_by_range(url, "/bme280/temperature?min=%f&max=%f", "bme280_data");
+}
+    
+
+HTTP_response get_SCD41_by_temperature_range(const char* url)
+{
+    return get_temperature_by_range(url, "/scd41/temperature?min=%f&max=%f", "scd41_data");
 }
 
 
 HTTP_response get_SCD41_by_temperature_range(const char* url)
 {
-    float min_temp, max_temp;
-    sscanf(url, "/scd41/temperature?min=%f&max=%f", &min_temp, &max_temp);
-    char query[256];
-    snprintf(query, sizeof(query), "SELECT * FROM scd41_data WHERE temperature >= %f AND temperature <= %f", min_temp, max_temp);
-    char* jsonResult = executeQueryToJson(query);
-    if (jsonResult == NULL) {
-        HTTP_response response = {NULL, INTERNAL_SERVER_ERROR};
-        return response;
-    }
-    HTTP_response response = {jsonResult, OK};
-    return response;
+    return get_temperature_by_range(url, "/scd41/temperature?min=%f&max=%f", "scd41_data");
 }
