@@ -18,4 +18,10 @@ HTTP_response get_all_SCD41(const char* url);
 
 HTTP_response get_SCD41_by_id(const char* url);
 
+HTTP_response get_BME280_by_humidity_range(const char* url);
+
+HTTP_response get_DMI_by_humidity_range(const char* url);
+
+HTTP_response get_SCD41_by_humidity_range(const char* url);
+
 #endif
