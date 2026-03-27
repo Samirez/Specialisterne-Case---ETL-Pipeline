@@ -35,13 +35,22 @@ HTTP_response get_BME280_by_pressure_range(const char* url)
 
 HTTP_response pressure_router(const char* url, const char* method)
 {
-    if (validate_method(method, "GET")) {
-        if (validate_route(url, "/dmi/pressure?min=%f&max=%f")) {
-            return get_DMI_by_pressure_range(url);
-        } else if (validate_route(url, "/bme280/pressure?min=%f&max=%f")) {
-            return get_BME280_by_pressure_range(url);
+    if (strncmp(url, "/dmi/pressure", strlen("/dmi/pressure")) == 0) {
+        if (!validate_method(method, "GET")) {
+            HTTP_response method_not_allowed = {simple_message("Method not allowed"), METHOD_NOT_ALLOWED};
+            return method_not_allowed;
         }
+        return get_DMI_by_pressure_range(url);
     }
+
+    if (strncmp(url, "/bme280/pressure", strlen("/bme280/pressure")) == 0) {
+        if (!validate_method(method, "GET")) {
+            HTTP_response method_not_allowed = {simple_message("Method not allowed"), METHOD_NOT_ALLOWED};
+            return method_not_allowed;
+        }
+        return get_BME280_by_pressure_range(url);
+    }
+
     HTTP_response not_found = {simple_message("Not found"), NOT_FOUND};
     return not_found;
 }

@@ -47,7 +47,8 @@ enum MHD_Result default_handler(
     else if (strncmp(url_str, "/dmi/", 5) == 0 ||
          strncmp(url_str, "/bme280/", 8) == 0 ||
          strncmp(url_str, "/ds18b20/", 9) == 0 ||
-         strncmp(url_str, "/scd41/", 7) == 0) {
+         strncmp(url_str, "/scd41/", 7) == 0) 
+    {
       if (strstr(url_str, "/humidity") != NULL) {
         response_api = humidity_router(url_str, method_str);
       } else if (strstr(url_str, "/temperature") != NULL) {

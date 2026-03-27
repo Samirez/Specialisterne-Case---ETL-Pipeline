@@ -185,15 +185,78 @@ HTTP_response get_SCD41_by_humidity_range(const char* url)
 
 HTTP_response humidity_router(const char* url, const char* method)
 {
-    if (validate_route(url, "/bme280/humidity") && validate_method(method, "GET")) {
+    if (strncmp(url, "/bme280/", strlen("/bme280/")) == 0) {
+        if (!validate_method(method, "GET")) {
+            HTTP_response method_not_allowed = {simple_message("Method not allowed"), METHOD_NOT_ALLOWED};
+            return method_not_allowed;
+        }
+        return get_all_BME280(url);
+    }
+
+    if (strncmp(url, "/bme280/", strlen("/bme280/")) == 0) {
+        if (!validate_method(method, "GET")) {
+            HTTP_response method_not_allowed = {simple_message("Method not allowed"), METHOD_NOT_ALLOWED};
+            return method_not_allowed;
+        }
+        return get_BME280_by_id(url);
+    }
+
+    if (strncmp(url, "/dmi/", strlen("/dmi/")) == 0) {
+        if (!validate_method(method, "GET")) {
+            HTTP_response method_not_allowed = {simple_message("Method not allowed"), METHOD_NOT_ALLOWED};
+            return method_not_allowed;
+        }
+        return get_all_DMI(url);
+    }
+
+    if (strncmp(url, "/dmi/", strlen("/dmi/")) == 0) {
+        if (!validate_method(method, "GET")) {
+            HTTP_response method_not_allowed = {simple_message("Method not allowed"), METHOD_NOT_ALLOWED};
+            return method_not_allowed;
+        }
+        return get_DMI_by_id(url);
+    }
+
+     if (strncmp(url, "/ds18b20/", strlen("/ds18b20/")) == 0) {
+        if (!validate_method(method, "GET")) {
+            HTTP_response method_not_allowed = {simple_message("Method not allowed"), METHOD_NOT_ALLOWED};
+            return method_not_allowed;
+        }
+        return get_all_DS18B20(url);
+    }
+
+    if (strncmp(url, "/ds18b20/", strlen("/ds18b20/")) == 0) {
+        if (!validate_method(method, "GET")) {
+            HTTP_response method_not_allowed = {simple_message("Method not allowed"), METHOD_NOT_ALLOWED};
+            return method_not_allowed;
+        }
+        return get_DS18B20_by_id(url);
+    }
+
+    if (strncmp(url, "/bme280/humidity", strlen("/bme280/humidity")) == 0) {
+        if (!validate_method(method, "GET")) {
+            HTTP_response method_not_allowed = {simple_message("Method not allowed"), METHOD_NOT_ALLOWED};
+            return method_not_allowed;
+        }
         return get_BME280_by_humidity_range(url);
     }
-    if (validate_route(url, "/dmi/humidity") && validate_method(method, "GET")) {
+
+    if (strncmp(url, "/dmi/humidity", strlen("/dmi/humidity")) == 0) {
+        if (!validate_method(method, "GET")) {
+            HTTP_response method_not_allowed = {simple_message("Method not allowed"), METHOD_NOT_ALLOWED};
+            return method_not_allowed;
+        }
         return get_DMI_by_humidity_range(url);
     }
-    if (validate_route(url, "/scd41/humidity") && validate_method(method, "GET")) {
+
+    if (strncmp(url, "/scd41/humidity", strlen("/scd41/humidity")) == 0) {
+        if (!validate_method(method, "GET")) {
+            HTTP_response method_not_allowed = {simple_message("Method not allowed"), METHOD_NOT_ALLOWED};
+            return method_not_allowed;
+        }
         return get_SCD41_by_humidity_range(url);
-     }
+    }
+
     HTTP_response not_found = {simple_message("Not found"), NOT_FOUND};
     return not_found;
 }

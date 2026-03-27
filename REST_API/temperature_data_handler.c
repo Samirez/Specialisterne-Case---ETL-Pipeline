@@ -49,7 +49,7 @@ HTTP_response get_SCD41_by_temperature_range(const char* url)
 
 HTTP_response temperature_router(const char* url, const char* method)
 {
-    if (validate_route(url, "/dmi/temperature?min=%f&max=%f")) {
+    if (strncmp(url, "/dmi/temperature", strlen("/dmi/temperature")) == 0) {
         if (!validate_method(method, "GET")) {
             HTTP_response method_not_allowed = {simple_message("Method not allowed"), METHOD_NOT_ALLOWED};
             return method_not_allowed;
@@ -57,7 +57,7 @@ HTTP_response temperature_router(const char* url, const char* method)
         return get_DMI_by_temperature_range(url);
     }
 
-    if (validate_route(url, "/ds18b20/temperature?min=%f&max=%f")) {
+    if (strncmp(url, "/ds18b20/temperature", strlen("/ds18b20/temperature")) == 0) {
         if (!validate_method(method, "GET")) {
             HTTP_response method_not_allowed = {simple_message("Method not allowed"), METHOD_NOT_ALLOWED};
             return method_not_allowed;
@@ -65,7 +65,7 @@ HTTP_response temperature_router(const char* url, const char* method)
         return get_DS18B20_by_temperature_range(url);
     }
 
-    if (validate_route(url, "/bme280/temperature?min=%f&max=%f")) {
+    if (strncmp(url, "/bme280/temperature", strlen("/bme280/temperature")) == 0) {
         if (!validate_method(method, "GET")) {
             HTTP_response method_not_allowed = {simple_message("Method not allowed"), METHOD_NOT_ALLOWED};
             return method_not_allowed;
@@ -73,7 +73,7 @@ HTTP_response temperature_router(const char* url, const char* method)
         return get_BME280_by_temperature_range(url);
     }
 
-    if (validate_route(url, "/scd41/temperature?min=%f&max=%f")) {
+    if (strncmp(url, "/scd41/temperature", strlen("/scd41/temperature")) == 0) {
         if (!validate_method(method, "GET")) {
             HTTP_response method_not_allowed = {simple_message("Method not allowed"), METHOD_NOT_ALLOWED};
             return method_not_allowed;
