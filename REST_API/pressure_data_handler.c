@@ -33,3 +33,16 @@ HTTP_response get_BME280_by_pressure_range(const char* url)
     return response;
 }
 
+HTTP_response pressure_router(const char* url, const char* method)
+{
+    if (validate_method(method, "GET")) {
+        if (validate_route(url, "/dmi/pressure?min=%f&max=%f")) {
+            return get_DMI_by_pressure_range(url);
+        } else if (validate_route(url, "/bme280/pressure?min=%f&max=%f")) {
+            return get_BME280_by_pressure_range(url);
+        }
+    }
+    HTTP_response not_found = {simple_message("Not found"), NOT_FOUND};
+    return not_found;
+}
+

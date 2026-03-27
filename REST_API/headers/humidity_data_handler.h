@@ -24,4 +24,6 @@ HTTP_response get_DMI_by_humidity_range(const char* url);
 
 HTTP_response get_SCD41_by_humidity_range(const char* url);
 
+HTTP_response humidity_router(const char* url, const char* method);
+
 #endif

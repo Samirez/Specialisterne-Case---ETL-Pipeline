@@ -19,4 +19,6 @@ HTTP_response get_BME280_by_temperature_range(const char* url);
 // get_temperature_by_range() in REST_API/temperature_data_handler.c.
 HTTP_response get_SCD41_by_temperature_range(const char* url);
 
+
+HTTP_response temperature_router(const char* url, const char* method);
 #endif

@@ -158,3 +158,18 @@ HTTP_response get_SCD41_by_humidity_range(const char* url)
     HTTP_response response = {jsonResult, OK};
     return response;
 }
+
+HTTP_response humidity_router(const char* url, const char* method)
+{
+    if (validate_route(url, "/bme280/humidity") && validate_method(method, "GET")) {
+        return get_BME280_by_humidity_range(url);
+    }
+    if (validate_route(url, "/dmi/humidity") && validate_method(method, "GET")) {
+        return get_DMI_by_humidity_range(url);
+    }
+    if (validate_route(url, "/scd41/humidity") && validate_method(method, "GET")) {
+        return get_SCD41_by_humidity_range(url);
+     }
+    HTTP_response not_found = {simple_message("Not found"), NOT_FOUND};
+    return not_found;
+}

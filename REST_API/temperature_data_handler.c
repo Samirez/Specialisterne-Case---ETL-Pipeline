@@ -45,3 +45,21 @@ HTTP_response get_SCD41_by_temperature_range(const char* url)
 {
     return get_temperature_by_range(url, "/scd41/temperature?min=%f&max=%f", "scd41_data");
 }
+
+
+HTTP_response temperature_router(const char* url, const char* method)
+{
+    if (validate_method(method, "GET")) {
+        if (validate_route(url, "/dmi/temperature?min=%f&max=%f")) {
+            return get_DMI_by_temperature_range(url);
+        } else if (validate_route(url, "/ds18b20/temperature?min=%f&max=%f")) {
+            return get_DS18B20_by_temperature_range(url);
+        } else if (validate_route(url, "/bme280/temperature?min=%f&max=%f")) {
+            return get_BME280_by_temperature_range(url);
+        } else if (validate_route(url, "/scd41/temperature?min=%f&max=%f")) {
+            return get_SCD41_by_temperature_range(url);
+        }
+    }
+    HTTP_response not_found = {simple_message("Not found"), NOT_FOUND};
+    return not_found;
+}
