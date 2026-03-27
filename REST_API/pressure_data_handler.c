@@ -1,0 +1,35 @@
+#include "pressure_data_handler.h"
+#include "headers/postgres_handler.h"
+#include "headers/response_builder.h"
+#include "headers/utils.h"
+
+HTTP_response get_DMI_by_pressure_range(const char* url)
+{
+    float min_pressure, max_pressure;
+    sscanf(url, "/dmi/pressure?min=%f&max=%f", &min_pressure, &max_pressure);
+    char query[256];
+    snprintf(query, sizeof(query), "SELECT * FROM dmi_data WHERE pressure >= %f AND pressure <= %f", min_pressure, max_pressure);
+    char* jsonResult = executeQueryToJson(query);
+    if (jsonResult == NULL) {
+        HTTP_response response = {NULL, INTERNAL_SERVER_ERROR};
+        return response;
+    }
+    HTTP_response response = {jsonResult, OK};
+    return response;
+}
+
+HTTP_response get_BME280_by_pressure_range(const char* url)
+{
+    float min_pressure, max_pressure;
+    sscanf(url, "/bme280/pressure?min=%f&max=%f", &min_pressure, &max_pressure);
+    char query[256];
+    snprintf(query, sizeof(query), "SELECT * FROM bme280_data WHERE pressure >= %f AND pressure <= %f", min_pressure, max_pressure);
+    char* jsonResult = executeQueryToJson(query);
+    if (jsonResult == NULL) {
+        HTTP_response response = {NULL, INTERNAL_SERVER_ERROR};
+        return response;
+    }
+    HTTP_response response = {jsonResult, OK};
+    return response;
+}
+
