@@ -5,6 +5,10 @@
 #include "humidity_data_handler.h"
 #include "temperature_data_handler.h"
 #include "pressure_data_handler.h"
+#include "bme280_handler.h"
+#include "dmi_handler.h"
+#include "scd41_handler.h"
+#include "ds180b20_handler.h"
 
 _Thread_local jmp_buf exceptionBuffer;
 
@@ -42,6 +46,25 @@ enum MHD_Result default_handler(
     
     else if (validate_route(url_str, "/users")) {
       response_api = user_router(url_str, method_str, upload_data);
+    }
+
+    else if (validate_route(url_str, "/bme280/")) {
+      response_api = bme280_router(url_str, method_str, upload_data);
+    }
+
+    else if (validate_route(url_str, "/dmi/"))
+    {
+      response_api = dmi_router(url_str, method_str, upload_data);
+    }
+
+    else if (validate_route(url_str, "/scd41/"))
+    {
+      response_api = scd41_router(url_str, method_str, upload_data);
+    }
+
+    else if (validate_route(url_str, "/ds18b20/"))
+    {
+      response_api = ds180b20_router(url_str, method_str, upload_data);
     }
     
     else if (strncmp(url_str, "/dmi/", 5) == 0 ||
