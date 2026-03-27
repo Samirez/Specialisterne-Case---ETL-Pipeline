@@ -2,6 +2,9 @@
 #include "headers/user_handler.h"
 #include <setjmp.h>
 #include "headers/handler.h"
+#include "humidity_data_handler.h"
+#include "temperature_data_handler.h"
+#include "pressure_data_handler.h"
 
 _Thread_local jmp_buf exceptionBuffer;
 
@@ -39,6 +42,24 @@ enum MHD_Result default_handler(
     
     else if (validate_route(url_str, "/users")) {
       response_api = user_router(url_str, method_str, upload_data);
+    }
+    
+    else if (strncmp(url_str, "/dmi/", 5) == 0 ||
+         strncmp(url_str, "/bme280/", 8) == 0 ||
+         strncmp(url_str, "/ds18b20/", 9) == 0 ||
+         strncmp(url_str, "/scd41/", 7) == 0) {
+      if (strstr(url_str, "/humidity") != NULL) {
+        response_api = humidity_router(url_str, method_str);
+      } else if (strstr(url_str, "/temperature") != NULL) {
+        response_api = temperature_router(url_str, method_str);
+      } else if (strstr(url_str, "/pressure") != NULL) {
+        response_api = pressure_router(url_str, method_str);
+      } else {
+        response_api = (HTTP_response){
+          .body = simple_message("Not found"),
+          .status = NOT_FOUND
+        };
+      }
     }
     
     else {
